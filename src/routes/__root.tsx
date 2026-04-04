@@ -50,8 +50,9 @@ const NAV: NavItem[] = [
         color: 'bg-rose-50',
         textColor: 'text-rose-700',
         children: [
-          { kind: 'leaf', label: '华文', emoji: '✍️', to: '/s3/chinese' },
+          { kind: 'leaf', label: '华文',    emoji: '✍️', to: '/s3/chinese' },
           { kind: 'leaf', label: '生词游戏', emoji: '🎮', to: '/s3/chinese/shengci' },
+          { kind: 'leaf', label: '一的变调', emoji: '🎵', to: '/s3/chinese/yibiandiao' },
         ],
       },
     ],

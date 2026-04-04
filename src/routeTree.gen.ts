@@ -14,6 +14,7 @@ import { Route as S3ChineseIndexRouteImport } from './routes/s3/chinese/index'
 import { Route as S3MathPercentageIndexRouteImport } from './routes/s3/math/percentage/index'
 import { Route as S3MathFractionIndexRouteImport } from './routes/s3/math/fraction/index'
 import { Route as S3MathDecimalIndexRouteImport } from './routes/s3/math/decimal/index'
+import { Route as S3ChineseYibiandiaoIndexRouteImport } from './routes/s3/chinese/yibiandiao/index'
 import { Route as S3ChineseShengciIndexRouteImport } from './routes/s3/chinese/shengci/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,12 @@ const S3MathDecimalIndexRoute = S3MathDecimalIndexRouteImport.update({
   path: '/s3/math/decimal/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const S3ChineseYibiandiaoIndexRoute =
+  S3ChineseYibiandiaoIndexRouteImport.update({
+    id: '/s3/chinese/yibiandiao/',
+    path: '/s3/chinese/yibiandiao/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const S3ChineseShengciIndexRoute = S3ChineseShengciIndexRouteImport.update({
   id: '/s3/chinese/shengci/',
   path: '/s3/chinese/shengci/',
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/s3/chinese/': typeof S3ChineseIndexRoute
   '/s3/chinese/shengci/': typeof S3ChineseShengciIndexRoute
+  '/s3/chinese/yibiandiao/': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction/': typeof S3MathFractionIndexRoute
   '/s3/math/percentage/': typeof S3MathPercentageIndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/s3/chinese': typeof S3ChineseIndexRoute
   '/s3/chinese/shengci': typeof S3ChineseShengciIndexRoute
+  '/s3/chinese/yibiandiao': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction': typeof S3MathFractionIndexRoute
   '/s3/math/percentage': typeof S3MathPercentageIndexRoute
@@ -68,6 +77,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/s3/chinese/': typeof S3ChineseIndexRoute
   '/s3/chinese/shengci/': typeof S3ChineseShengciIndexRoute
+  '/s3/chinese/yibiandiao/': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction/': typeof S3MathFractionIndexRoute
   '/s3/math/percentage/': typeof S3MathPercentageIndexRoute
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/'
     | '/s3/chinese/'
     | '/s3/chinese/shengci/'
+    | '/s3/chinese/yibiandiao/'
     | '/s3/math/decimal/'
     | '/s3/math/fraction/'
     | '/s3/math/percentage/'
@@ -86,6 +97,7 @@ export interface FileRouteTypes {
     | '/'
     | '/s3/chinese'
     | '/s3/chinese/shengci'
+    | '/s3/chinese/yibiandiao'
     | '/s3/math/decimal'
     | '/s3/math/fraction'
     | '/s3/math/percentage'
@@ -94,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/s3/chinese/'
     | '/s3/chinese/shengci/'
+    | '/s3/chinese/yibiandiao/'
     | '/s3/math/decimal/'
     | '/s3/math/fraction/'
     | '/s3/math/percentage/'
@@ -103,6 +116,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   S3ChineseIndexRoute: typeof S3ChineseIndexRoute
   S3ChineseShengciIndexRoute: typeof S3ChineseShengciIndexRoute
+  S3ChineseYibiandiaoIndexRoute: typeof S3ChineseYibiandiaoIndexRoute
   S3MathDecimalIndexRoute: typeof S3MathDecimalIndexRoute
   S3MathFractionIndexRoute: typeof S3MathFractionIndexRoute
   S3MathPercentageIndexRoute: typeof S3MathPercentageIndexRoute
@@ -145,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof S3MathDecimalIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s3/chinese/yibiandiao/': {
+      id: '/s3/chinese/yibiandiao/'
+      path: '/s3/chinese/yibiandiao'
+      fullPath: '/s3/chinese/yibiandiao/'
+      preLoaderRoute: typeof S3ChineseYibiandiaoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/s3/chinese/shengci/': {
       id: '/s3/chinese/shengci/'
       path: '/s3/chinese/shengci'
@@ -159,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   S3ChineseIndexRoute: S3ChineseIndexRoute,
   S3ChineseShengciIndexRoute: S3ChineseShengciIndexRoute,
+  S3ChineseYibiandiaoIndexRoute: S3ChineseYibiandiaoIndexRoute,
   S3MathDecimalIndexRoute: S3MathDecimalIndexRoute,
   S3MathFractionIndexRoute: S3MathFractionIndexRoute,
   S3MathPercentageIndexRoute: S3MathPercentageIndexRoute,
