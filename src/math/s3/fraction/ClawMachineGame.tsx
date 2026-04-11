@@ -1,8 +1,76 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
-// ─── Types ─────────────────────────────────────────────────────────────────────
+// ─── Web Audio sound effects (no external files needed) ────────────────────────
+function playCorrect() {
+  try {
+    const ctx = new AudioContext()
+    // Happy ascending chime: C5 → E5 → G5
+    const notes = [523.25, 659.25, 783.99]
+    notes.forEach((freq, i) => {
+      const osc  = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.type = 'sine'
+      osc.frequency.value = freq
+      const t = ctx.currentTime + i * 0.13
+      gain.gain.setValueAtTime(0, t)
+      gain.gain.linearRampToValueAtTime(0.35, t + 0.04)
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38)
+      osc.start(t)
+      osc.stop(t + 0.4)
+    })
+    // Sparkle shimmer on top
+    const shimmer = ctx.createOscillator()
+    const shimGain = ctx.createGain()
+    shimmer.connect(shimGain)
+    shimGain.connect(ctx.destination)
+    shimmer.type = 'triangle'
+    shimmer.frequency.setValueAtTime(1200, ctx.currentTime + 0.26)
+    shimmer.frequency.exponentialRampToValueAtTime(1800, ctx.currentTime + 0.5)
+    shimGain.gain.setValueAtTime(0, ctx.currentTime + 0.26)
+    shimGain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.3)
+    shimGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.55)
+    shimmer.start(ctx.currentTime + 0.26)
+    shimmer.stop(ctx.currentTime + 0.56)
+    setTimeout(() => ctx.close(), 1000)
+  } catch (_) { /* AudioContext not available */ }
+}
+
+function playWrong() {
+  try {
+    const ctx = new AudioContext()
+    // Sad descending buzz: two low notes dropping
+    const osc1  = ctx.createOscillator()
+    const gain1 = ctx.createGain()
+    osc1.connect(gain1)
+    gain1.connect(ctx.destination)
+    osc1.type = 'sawtooth'
+    osc1.frequency.setValueAtTime(320, ctx.currentTime)
+    osc1.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.35)
+    gain1.gain.setValueAtTime(0.28, ctx.currentTime)
+    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4)
+    osc1.start(ctx.currentTime)
+    osc1.stop(ctx.currentTime + 0.42)
+    // Second lower thud
+    const osc2  = ctx.createOscillator()
+    const gain2 = ctx.createGain()
+    osc2.connect(gain2)
+    gain2.connect(ctx.destination)
+    osc2.type = 'square'
+    osc2.frequency.setValueAtTime(200, ctx.currentTime + 0.3)
+    osc2.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.6)
+    gain2.gain.setValueAtTime(0, ctx.currentTime + 0.3)
+    gain2.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.34)
+    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.65)
+    osc2.start(ctx.currentTime + 0.3)
+    osc2.stop(ctx.currentTime + 0.67)
+    setTimeout(() => ctx.close(), 1200)
+  } catch (_) { /* AudioContext not available */ }
+}
+
 type FractionType = 'proper' | 'improper' | 'mixed'
-type Phase = 'idle' | 'moving' | 'dropping' | 'grabbing' | 'rising' | 'depositing' | 'done'
+type Phase = 'idle' | 'moving' | 'dropping' | 'grabbing' | 'rising' | 'depositing' | 'returning' | 'releasing' | 'done'
 
 interface FractionItem {
   id: number
@@ -407,6 +475,7 @@ export default function ClawMachineGame() {
   const handleBucket = (type: FractionType) => {
     if (phase !== 'idle' || !selected) return
     const target = selected
+    const correct = target.type === type
 
     // 1) Slide claw to target x
     setPhase('moving')
@@ -419,36 +488,76 @@ export default function ClawMachineGame() {
       setPhase('dropping')
     }, MOVE_MS)
 
-    // 3) Close claw
+    // 3) Close claw (attempt to grab)
     setTimeout(() => {
       setClawOpen(false)
       setPhase('grabbing')
     }, MOVE_MS + DROP_MS)
 
-    // 4) Rise back up
-    setTimeout(() => {
-      setWireH(50)
-      setHeldItem(target)
-      setItems(prev => prev.filter(i => i.id !== target.id))
-      setPhase('rising')
-    }, MOVE_MS + DROP_MS + GRAB_MS)
+    if (correct) {
+      // ── CORRECT: lift up and deposit ──
 
-    // 5) Deposit
-    setTimeout(() => {
-      setClawOpen(true)
-      setPhase('depositing')
-      const correct = target.type === type
-      setBuckets(prev => ({ ...prev, [type]: [...prev[type], target] }))
-      setScore(prev => prev + (correct ? 10 : -5))
-      flash(correct ? '🎉 正确！+10 分' : '❌ 放错了！−5 分', correct)
-      setHeldItem(null)
-      setSelected(null)
-    }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS)
+      // 4) Rise back up holding the item
+      setTimeout(() => {
+        setWireH(50)
+        setHeldItem(target)
+        setItems(prev => prev.filter(i => i.id !== target.id))
+        setPhase('rising')
+      }, MOVE_MS + DROP_MS + GRAB_MS)
 
-    // 6) Idle
-    setTimeout(() => {
-      setPhase('idle')
-    }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS + DEPOSIT_MS)
+      // 5) Open claw and deposit
+      setTimeout(() => {
+        setClawOpen(true)
+        setPhase('depositing')
+        setBuckets(prev => ({ ...prev, [type]: [...prev[type], target] }))
+        setScore(prev => prev + 10)
+        flash('🎉 正确！+10 分', true)
+        playCorrect()
+        setHeldItem(null)
+        setSelected(null)
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS)
+
+      // 6) Idle
+      setTimeout(() => {
+        setPhase('idle')
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS + DEPOSIT_MS)
+
+    } else {
+      // ── WRONG: claw slips — drop back down to put the item back ──
+
+      // 4) Rise a little (claw slips, item stays in machine)
+      setTimeout(() => {
+        setWireH(50)
+        setPhase('rising')
+      }, MOVE_MS + DROP_MS + GRAB_MS)
+
+      // 5) Move back over the item's original spot and drop back down
+      setTimeout(() => {
+        setClawOpen(false)   // keep closed while returning
+        setWireH(dropTo)
+        setPhase('returning')
+        flash('❌ 放错了！爪子滑掉了…', false)
+        setScore(prev => prev - 5)
+        playWrong()
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS)
+
+      // 6) Open claw — release the item back in place
+      setTimeout(() => {
+        setClawOpen(true)
+        setPhase('releasing')
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS + DROP_MS)
+
+      // 7) Rise back up empty
+      setTimeout(() => {
+        setWireH(50)
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS + DROP_MS + GRAB_MS)
+
+      // 8) Idle — item is still in the machine
+      setTimeout(() => {
+        setSelected(null)
+        setPhase('idle')
+      }, MOVE_MS + DROP_MS + GRAB_MS + RISE_MS + DROP_MS + GRAB_MS + RISE_MS)
+    }
   }
 
   const nextRound = () => {
@@ -475,8 +584,10 @@ export default function ClawMachineGame() {
 
   // Wire transition duration strings
   const wireTransDuration =
-    phase === 'dropping' ? `${DROP_MS}ms` :
-    phase === 'rising'   ? `${RISE_MS}ms` : '600ms'
+    phase === 'dropping'  ? `${DROP_MS}ms` :
+    phase === 'returning' ? `${DROP_MS}ms` :
+    phase === 'rising'    ? `${RISE_MS}ms` :
+    phase === 'releasing' ? `${RISE_MS}ms` : '600ms'
   const clawTransDuration = `${MOVE_MS}ms`
 
   const PHASE_ZH: Record<Phase, string> = {
@@ -486,6 +597,8 @@ export default function ClawMachineGame() {
     grabbing:   '🤏 抓取中！',
     rising:     '⬆️ 爪子上升中…',
     depositing: '📥 放入篮子…',
+    returning:  '😬 放错了，爪子滑掉！把玩偶放回去…',
+    releasing:  '↩️ 放回原位…',
     done:       '✅ 完成！',
   }
 
