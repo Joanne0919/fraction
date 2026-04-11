@@ -39,6 +39,7 @@ const NAV: NavItem[] = [
         textColor: 'text-blue-700',
         children: [
           { kind: 'leaf', label: '分数', emoji: '🍕', to: '/s3/math/fraction' },
+          { kind: 'leaf', label: '分数抓娃娃', emoji: '🎮', to: '/s3/math/fraction/claw-machine' },
           { kind: 'leaf', label: '小数', emoji: '🔢', to: '/s3/math/decimal' },
           { kind: 'leaf', label: '百分数·小数·百分比', emoji: '💯', to: '/s3/math/percentage' },
         ],

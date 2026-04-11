@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { RotateCcw } from 'lucide-react'
@@ -478,10 +479,20 @@ export default function FractionPage() {
       )}
 
       {/* Tips */}
-      <section className="flex flex-wrap justify-center gap-3.5 mt-3 mb-16 px-9">
+      <section className="flex flex-wrap justify-center gap-3.5 mt-3 mb-8 px-9">
         {['👆 点击切片来选择','🌑 暗色 = 未选中','🌕 亮色 = 已选中','🔢 分数实时更新'].map(tip => (
           <div key={tip} className="bg-white rounded-[22px] px-5 py-3 text-lg font-extrabold text-slate-500 shadow-sm border-2 border-slate-100">{tip}</div>
         ))}
+      </section>
+
+      {/* Claw Machine Game link */}
+      <section className="flex justify-center mb-16 px-9">
+        <Link
+          to="/s3/math/fraction/claw-machine"
+          className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold px-8 py-4 rounded-2xl text-xl shadow-xl transition-all duration-200"
+        >
+          🎮 玩分数抓娃娃游戏
+        </Link>
       </section>
 
     </div>

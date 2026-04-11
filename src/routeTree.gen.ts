@@ -16,6 +16,7 @@ import { Route as S3MathFractionIndexRouteImport } from './routes/s3/math/fracti
 import { Route as S3MathDecimalIndexRouteImport } from './routes/s3/math/decimal/index'
 import { Route as S3ChineseYibiandiaoIndexRouteImport } from './routes/s3/chinese/yibiandiao/index'
 import { Route as S3ChineseShengciIndexRouteImport } from './routes/s3/chinese/shengci/index'
+import { Route as S3MathFractionClawMachineIndexRouteImport } from './routes/s3/math/fraction/claw-machine/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,6 +54,12 @@ const S3ChineseShengciIndexRoute = S3ChineseShengciIndexRouteImport.update({
   path: '/s3/chinese/shengci/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const S3MathFractionClawMachineIndexRoute =
+  S3MathFractionClawMachineIndexRouteImport.update({
+    id: '/s3/math/fraction/claw-machine/',
+    path: '/s3/math/fraction/claw-machine/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction/': typeof S3MathFractionIndexRoute
   '/s3/math/percentage/': typeof S3MathPercentageIndexRoute
+  '/s3/math/fraction/claw-machine/': typeof S3MathFractionClawMachineIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -71,6 +79,7 @@ export interface FileRoutesByTo {
   '/s3/math/decimal': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction': typeof S3MathFractionIndexRoute
   '/s3/math/percentage': typeof S3MathPercentageIndexRoute
+  '/s3/math/fraction/claw-machine': typeof S3MathFractionClawMachineIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -81,6 +90,7 @@ export interface FileRoutesById {
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
   '/s3/math/fraction/': typeof S3MathFractionIndexRoute
   '/s3/math/percentage/': typeof S3MathPercentageIndexRoute
+  '/s3/math/fraction/claw-machine/': typeof S3MathFractionClawMachineIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -92,6 +102,7 @@ export interface FileRouteTypes {
     | '/s3/math/decimal/'
     | '/s3/math/fraction/'
     | '/s3/math/percentage/'
+    | '/s3/math/fraction/claw-machine/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -101,6 +112,7 @@ export interface FileRouteTypes {
     | '/s3/math/decimal'
     | '/s3/math/fraction'
     | '/s3/math/percentage'
+    | '/s3/math/fraction/claw-machine'
   id:
     | '__root__'
     | '/'
@@ -110,6 +122,7 @@ export interface FileRouteTypes {
     | '/s3/math/decimal/'
     | '/s3/math/fraction/'
     | '/s3/math/percentage/'
+    | '/s3/math/fraction/claw-machine/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -120,6 +133,7 @@ export interface RootRouteChildren {
   S3MathDecimalIndexRoute: typeof S3MathDecimalIndexRoute
   S3MathFractionIndexRoute: typeof S3MathFractionIndexRoute
   S3MathPercentageIndexRoute: typeof S3MathPercentageIndexRoute
+  S3MathFractionClawMachineIndexRoute: typeof S3MathFractionClawMachineIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -173,6 +187,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof S3ChineseShengciIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s3/math/fraction/claw-machine/': {
+      id: '/s3/math/fraction/claw-machine/'
+      path: '/s3/math/fraction/claw-machine'
+      fullPath: '/s3/math/fraction/claw-machine/'
+      preLoaderRoute: typeof S3MathFractionClawMachineIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -184,6 +205,7 @@ const rootRouteChildren: RootRouteChildren = {
   S3MathDecimalIndexRoute: S3MathDecimalIndexRoute,
   S3MathFractionIndexRoute: S3MathFractionIndexRoute,
   S3MathPercentageIndexRoute: S3MathPercentageIndexRoute,
+  S3MathFractionClawMachineIndexRoute: S3MathFractionClawMachineIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
