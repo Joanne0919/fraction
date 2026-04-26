@@ -30,6 +30,14 @@ const GAMES = [
     gradient: 'from-rose-500 to-pink-600',
     badge: '🔴 可以玩了',
   },
+  {
+    emoji: '🎲',
+    title: '课堂随机抽背',
+    desc: '随机抽取学生 · 随机抽取词语 · 课堂抽背神器',
+    to: '/s3/chinese/choubei',
+    gradient: 'from-violet-500 to-purple-600',
+    badge: '🟣 可以玩了',
+  },
 ]
 
 export default function ChinesePage() {

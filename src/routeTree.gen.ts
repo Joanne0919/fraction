@@ -16,6 +16,7 @@ import { Route as S3MathFractionIndexRouteImport } from './routes/s3/math/fracti
 import { Route as S3MathDecimalIndexRouteImport } from './routes/s3/math/decimal/index'
 import { Route as S3ChineseYibiandiaoIndexRouteImport } from './routes/s3/chinese/yibiandiao/index'
 import { Route as S3ChineseShengciIndexRouteImport } from './routes/s3/chinese/shengci/index'
+import { Route as S3ChineseChoubeiIndexRouteImport } from './routes/s3/chinese/choubei/index'
 import { Route as S3MathFractionClawMachineIndexRouteImport } from './routes/s3/math/fraction/claw-machine/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -54,6 +55,11 @@ const S3ChineseShengciIndexRoute = S3ChineseShengciIndexRouteImport.update({
   path: '/s3/chinese/shengci/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const S3ChineseChoubeiIndexRoute = S3ChineseChoubeiIndexRouteImport.update({
+  id: '/s3/chinese/choubei/',
+  path: '/s3/chinese/choubei/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const S3MathFractionClawMachineIndexRoute =
   S3MathFractionClawMachineIndexRouteImport.update({
     id: '/s3/math/fraction/claw-machine/',
@@ -64,6 +70,7 @@ const S3MathFractionClawMachineIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/s3/chinese/': typeof S3ChineseIndexRoute
+  '/s3/chinese/choubei/': typeof S3ChineseChoubeiIndexRoute
   '/s3/chinese/shengci/': typeof S3ChineseShengciIndexRoute
   '/s3/chinese/yibiandiao/': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/s3/chinese': typeof S3ChineseIndexRoute
+  '/s3/chinese/choubei': typeof S3ChineseChoubeiIndexRoute
   '/s3/chinese/shengci': typeof S3ChineseShengciIndexRoute
   '/s3/chinese/yibiandiao': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal': typeof S3MathDecimalIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/s3/chinese/': typeof S3ChineseIndexRoute
+  '/s3/chinese/choubei/': typeof S3ChineseChoubeiIndexRoute
   '/s3/chinese/shengci/': typeof S3ChineseShengciIndexRoute
   '/s3/chinese/yibiandiao/': typeof S3ChineseYibiandiaoIndexRoute
   '/s3/math/decimal/': typeof S3MathDecimalIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/s3/chinese/'
+    | '/s3/chinese/choubei/'
     | '/s3/chinese/shengci/'
     | '/s3/chinese/yibiandiao/'
     | '/s3/math/decimal/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/s3/chinese'
+    | '/s3/chinese/choubei'
     | '/s3/chinese/shengci'
     | '/s3/chinese/yibiandiao'
     | '/s3/math/decimal'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/s3/chinese/'
+    | '/s3/chinese/choubei/'
     | '/s3/chinese/shengci/'
     | '/s3/chinese/yibiandiao/'
     | '/s3/math/decimal/'
@@ -128,6 +140,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   S3ChineseIndexRoute: typeof S3ChineseIndexRoute
+  S3ChineseChoubeiIndexRoute: typeof S3ChineseChoubeiIndexRoute
   S3ChineseShengciIndexRoute: typeof S3ChineseShengciIndexRoute
   S3ChineseYibiandiaoIndexRoute: typeof S3ChineseYibiandiaoIndexRoute
   S3MathDecimalIndexRoute: typeof S3MathDecimalIndexRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof S3ChineseShengciIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s3/chinese/choubei/': {
+      id: '/s3/chinese/choubei/'
+      path: '/s3/chinese/choubei'
+      fullPath: '/s3/chinese/choubei/'
+      preLoaderRoute: typeof S3ChineseChoubeiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/s3/math/fraction/claw-machine/': {
       id: '/s3/math/fraction/claw-machine/'
       path: '/s3/math/fraction/claw-machine'
@@ -200,6 +220,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   S3ChineseIndexRoute: S3ChineseIndexRoute,
+  S3ChineseChoubeiIndexRoute: S3ChineseChoubeiIndexRoute,
   S3ChineseShengciIndexRoute: S3ChineseShengciIndexRoute,
   S3ChineseYibiandiaoIndexRoute: S3ChineseYibiandiaoIndexRoute,
   S3MathDecimalIndexRoute: S3MathDecimalIndexRoute,

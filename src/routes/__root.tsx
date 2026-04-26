@@ -54,6 +54,7 @@ const NAV: NavItem[] = [
           { kind: 'leaf', label: '华文',    emoji: '✍️', to: '/s3/chinese' },
           { kind: 'leaf', label: '生词游戏', emoji: '🎮', to: '/s3/chinese/shengci' },
           { kind: 'leaf', label: '一的变调', emoji: '🎵', to: '/s3/chinese/yibiandiao' },
+          { kind: 'leaf', label: '课堂抽背', emoji: '🎲', to: '/s3/chinese/choubei' },
         ],
       },
     ],
