@@ -57,6 +57,19 @@ function randomColor() {
   return PANEL_COLORS[Math.floor(Math.random() * PANEL_COLORS.length)]
 }
 
+// ─── LocalStorage persistence ─────────────────────────────────────────────────
+
+const LS_NAMES = 'choubei_names'
+const LS_VOCAB = 'choubei_vocab'
+
+function loadLS(key: string, fallback: string): string {
+  try { return localStorage.getItem(key) ?? fallback } catch { return fallback }
+}
+
+function saveLS(key: string, value: string) {
+  try { localStorage.setItem(key, value) } catch { /* ignore */ }
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 type Phase = 'setup' | 'game'
@@ -64,11 +77,11 @@ type Phase = 'setup' | 'game'
 export default function ChouBeiGame() {
   // ── Setup state ──
   const [phase, setPhase] = useState<Phase>('setup')
-  const [namesRaw, setNamesRaw] = useState(
-    '小明\n小华\n小美\n大雄\n静香\n胖虎'
+  const [namesRaw, setNamesRaw] = useState(() =>
+    loadLS(LS_NAMES, '小明\n小华\n小美\n大雄\n静香\n胖虎')
   )
-  const [vocabRaw, setVocabRaw] = useState(
-    '苹果(píng guǒ)\n学校(xué xiào)\n快乐(kuài lè)\n朋友(péng yǒu)\n老师(lǎo shī)\n书本(shū běn)'
+  const [vocabRaw, setVocabRaw] = useState(() =>
+    loadLS(LS_VOCAB, '苹果(píng guǒ)\n学校(xué xiào)\n快乐(kuài lè)\n朋友(péng yǒu)\n老师(lǎo shī)\n书本(shū běn)')
   )
 
   // ── Game state ──
@@ -188,7 +201,7 @@ export default function ChouBeiGame() {
               <textarea
                 className="w-full h-44 rounded-2xl border-2 border-rose-100 focus:border-rose-400 focus:outline-none p-3 text-slate-700 font-medium resize-none text-sm leading-relaxed bg-rose-50/40"
                 value={namesRaw}
-                onChange={e => setNamesRaw(e.target.value)}
+                onChange={e => { setNamesRaw(e.target.value); saveLS(LS_NAMES, e.target.value) }}
                 placeholder={'小明\n小华\n小美'}
               />
             </div>
@@ -204,7 +217,7 @@ export default function ChouBeiGame() {
               <textarea
                 className="w-full h-44 rounded-2xl border-2 border-violet-100 focus:border-violet-400 focus:outline-none p-3 text-slate-700 font-medium resize-none text-sm leading-relaxed bg-violet-50/40"
                 value={vocabRaw}
-                onChange={e => setVocabRaw(e.target.value)}
+                onChange={e => { setVocabRaw(e.target.value); saveLS(LS_VOCAB, e.target.value) }}
                 placeholder={'苹果(píng guǒ)\n学校(xué xiào)\n快乐'}
               />
             </div>
